@@ -25,9 +25,10 @@ int main(int argc, char **argv){
         for(int q=1; q<world_size; q++){
             //data, count, datatype, source, tag, communicator, status
             MPI_Recv(greeting, 100, MPI_CHAR, q, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            printf("%s time of %f \n", greeting, t_decorrido[rank_procs]);
             t_fim[rank_procs] = MPI_Wtime();
             t_decorrido[rank_procs] = t_fim[rank_procs] - t_inicio[rank_procs];
+            printf("%s time of %f \n", greeting, t_decorrido[rank_procs]);
+            
         }
     }
     MPI_Finalize();

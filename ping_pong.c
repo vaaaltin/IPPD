@@ -1,3 +1,6 @@
+//send: data, count, datatype, destination, tag, communicator
+//receive: data, count, datatype, source, tag, communicator, status
+
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,11 +8,11 @@
 int main(int argc, char** argv) {
   const int PING_PONG_LIMIT = 50;
   int world_rank, world_size, ping_pong_count=0;
-  double t_inicio[2], t_fim[2], t_decorrido[2];
 
   MPI_Init(NULL, NULL);
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+  double t_inicio[world_size], t_fim[world_size], t_decorrido[world_size];
 
   t_inicio[world_rank] = MPI_Wtime();
 

@@ -1,5 +1,5 @@
 //send: data, count, datatype, destination, tag, communicator
-//receive: data, count, datatype, source, tag, communicator, status
+//receive: data, count, datatype, source, tag, communicator, status 
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>

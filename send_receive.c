@@ -4,20 +4,30 @@
 #include<string.h>
 
 int main(int argc, char **argv){
-    MPI_Init(NULL, NULL);
-    int world_rank, world_size;
+    int rank_procs, world_size;
     char greeting[100];
-
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    double t_inicio[10], t_fim[10], t_decorrido[10];
+    
+    MPI_Init(NULL, NULL);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank_procs);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    if(world_rank != 0){
-        sprintf(greeting, "Greeting from process %d of %d", world_rank, world_size);
+    if (world_size > 10) {
+        fprintf(stderr, "Max world size must be ten for %s\n", argv[0]);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+    t_inicio[rank_procs] = MPI_Wtime();
+    t_fim[rank_procs] = MPI_Wtime();
+    t_decorrido[rank_procs] = t_fim[rank_procs] - t_inicio[rank_procs];
+    if(rank_procs != 0){
+        sprintf(greeting, "Greeting from process %d of %d", rank_procs, world_size);
+        //data, count, datatype, destination, tag, communicator
         MPI_Send(greeting, strlen(greeting)+1, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
     }else{
         for(int q=1; q<world_size; q++){
+            //data, count, datatype, source, tag, communicator, status
             MPI_Recv(greeting, 100, MPI_CHAR, q, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            printf("%s\n", greeting);
+            printf("%s time of %f \n", greeting, t_decorrido[rank_procs]);
         }
     }
 

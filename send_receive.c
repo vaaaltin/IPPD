@@ -17,8 +17,6 @@ int main(int argc, char **argv){
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
     t_inicio[rank_procs] = MPI_Wtime();
-    t_fim[rank_procs] = MPI_Wtime();
-    t_decorrido[rank_procs] = t_fim[rank_procs] - t_inicio[rank_procs];
     if(rank_procs != 0){
         sprintf(greeting, "Greeting from process %d of %d", rank_procs, world_size);
         //data, count, datatype, destination, tag, communicator
@@ -28,11 +26,10 @@ int main(int argc, char **argv){
             //data, count, datatype, source, tag, communicator, status
             MPI_Recv(greeting, 100, MPI_CHAR, q, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             printf("%s time of %f \n", greeting, t_decorrido[rank_procs]);
+            t_fim[rank_procs] = MPI_Wtime();
+            t_decorrido[rank_procs] = t_fim[rank_procs] - t_inicio[rank_procs];
         }
     }
-
-  
-
     MPI_Finalize();
     return 0;
 }
